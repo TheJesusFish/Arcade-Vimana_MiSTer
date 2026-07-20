@@ -1,5 +1,6 @@
 db
 greybox_tmp
+backups
 incremental_db
 output_files
 simulation
