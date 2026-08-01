@@ -7,7 +7,7 @@
     <manufacturer>Toaplan (Dooyong License)</manufacturer>
     <players>2</players>
     <joystick>8-way</joystick>
-    <rotation>Vertical (CW)</rotation>
+    <rotation>vertical (ccw)</rotation>
     <region>Korea</region>
 
     <switches default="00,00,00,00,00,00,00,00">
