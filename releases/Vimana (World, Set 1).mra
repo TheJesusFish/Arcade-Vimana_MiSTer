@@ -7,7 +7,7 @@
     <manufacturer>Toaplan</manufacturer>
     <players>2</players>
     <joystick>8-way</joystick>
-    <rotation>Vertical (CW)</rotation>
+    <rotation>vertical (ccw)</rotation>
     <region>World</region>
 
     <switches default="00,00,02,00,00,00,00,00">
