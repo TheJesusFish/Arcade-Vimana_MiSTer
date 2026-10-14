@@ -191,7 +191,8 @@ localparam pcb_samesame = 1;
 
 wire [21:0] gamma_bus;
 
-//<buttons names="Fire,Jump,Start,Coin,Pause" default="A,B,R,L,Start" />
+// Both controllers use the same button layout: game/debug buttons [7:4],
+// Start [8], Coin [9], Pause [10]. Controller 0 is P1 and controller 1 is P2.
 // Inputs tied to z80_din
 reg [7:0] p1;
 reg [7:0] p2;
@@ -236,42 +237,44 @@ reg service;
 reg [7:0]   credits;
 
 always @ * begin
-        if ( status[38] == 0 ) begin
-        p1_right   <= joy0[0]   | key_p1_right;
-        p1_left    <= joy0[1]   | key_p1_left;
-        p1_down    <= joy0[2]   | key_p1_down;
-        p1_up      <= joy0[3]   | key_p1_up;
-        p1_buttons <= joy0[7:4] | {key_p1_c, key_p1_b, key_p1_a};
+    if ( status[38] == 0 ) begin
+        p1_right   = joy0[0]   | key_p1_right;
+        p1_left    = joy0[1]   | key_p1_left;
+        p1_down    = joy0[2]   | key_p1_down;
+        p1_up      = joy0[3]   | key_p1_up;
+        p1_buttons = joy0[7:4] | {1'b0, key_p1_c, key_p1_b, key_p1_a};
 
-        p2_right   <= joy1[0]   | key_p2_right;
-        p2_left    <= joy1[1]   | key_p2_left;
-        p2_down    <= joy1[2]   | key_p2_down;
-        p2_up      <= joy1[3]   | key_p2_up;
-        p2_buttons <= joy1[7:4] | {key_p2_c, key_p2_b, key_p2_a};
+        p2_right   = joy1[0]   | key_p2_right;
+        p2_left    = joy1[1]   | key_p2_left;
+        p2_down    = joy1[2]   | key_p2_down;
+        p2_up      = joy1[3]   | key_p2_up;
+        p2_buttons = joy1[7:4] | {1'b0, key_p2_c, key_p2_b, key_p2_a};
+
+        start1 = joy0[8] | key_start_1p;
+        start2 = joy1[8] | key_start_2p;
+        coin_a = joy0[9] | key_coin_a;
+        coin_b = joy1[9] | key_coin_b;
     end else begin
-        p2_right   <= joy0[0]   | key_p1_right;
-        p2_left    <= joy0[1]   | key_p1_left;
-        p2_down    <= joy0[2]   | key_p1_down;
-        p2_up      <= joy0[3]   | key_p1_up;
-        p2_buttons <= joy0[7:4] | {key_p1_c, key_p1_b, key_p1_a};
+        p2_right   = joy0[0]   | key_p1_right;
+        p2_left    = joy0[1]   | key_p1_left;
+        p2_down    = joy0[2]   | key_p1_down;
+        p2_up      = joy0[3]   | key_p1_up;
+        p2_buttons = joy0[7:4] | {1'b0, key_p1_c, key_p1_b, key_p1_a};
 
-        p1_right   <= joy1[0]   | key_p2_right;
-        p1_left    <= joy1[1]   | key_p2_left;
-        p1_down    <= joy1[2]   | key_p2_down;
-        p1_up      <= joy1[3]   | key_p2_up;
-        p1_buttons <= joy1[7:4] | {key_p2_c, key_p2_b, key_p2_a};
+        p1_right   = joy1[0]   | key_p2_right;
+        p1_left    = joy1[1]   | key_p2_left;
+        p1_down    = joy1[2]   | key_p2_down;
+        p1_up      = joy1[3]   | key_p2_up;
+        p1_buttons = joy1[7:4] | {1'b0, key_p2_c, key_p2_b, key_p2_a};
+
+        start1 = joy1[8] | key_start_2p;
+        start2 = joy0[8] | key_start_1p;
+        coin_a = joy1[9] | key_coin_b;
+        coin_b = joy0[9] | key_coin_a;
     end
-end
 
-always @ * begin
-        start1    <= joy0[8]  | joy1[8]  | key_start_1p;
-        start2    <= joy0[9]  | joy1[9]  | key_start_2p;
-
-        coin_a    <= joy0[10] | joy1[10] | key_coin_a;
-        coin_b    <= joy0[11] | joy1[11] | key_coin_b;
-
-        b_pause   <= joy0[12] | key_pause;
-        service   <= key_test;
+    b_pause = joy0[10] | joy1[10] | key_pause;
+    service = key_test;
 end
 
 // Keyboard handler
